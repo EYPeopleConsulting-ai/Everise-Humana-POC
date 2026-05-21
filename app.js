@@ -74,60 +74,76 @@ function currentLesson() {
 // ── Welcome Screen ──
 function showWelcomeScreen() {
  const lesson = currentLesson();
- const mod = MODULES[state.currentModule];
+ const mod =
+   MODULES[state.currentModule];
  const msgs =
    document.getElementById('messages');
- msgs.innerHTML = '';
- const card =
-   document.createElement('div');
- card.className = 'message ai';
- card.innerHTML = `
-<div class="msg-avatar ai">AI</div>
-<div class="msg-content">
-<div class="msg-bubble">
-<h2>Welcome back, Jordan.</h2>
-<p>
-         Ready to continue your Humana Tier 1 Advocate training?
-</p>
-<br>
-<strong>${mod.label}</strong>
-<br><br>
-       Lesson ${state.currentLessonIndex + 1}: ${lesson.name}
-</div>
-</div>
- `;
- msgs.appendChild(card);
- document.getElementById('chips-wrap').innerHTML =
-   '<button class="chip chip-primary" onclick="beginLearningSession()">' +
+ if (!msgs) return;
+ msgs.innerHTML =
+   '<div class="message ai">' +
+     '<div class="msg-avatar ai">AI</div>' +
+     '<div class="msg-content">' +
+       '<div class="msg-bubble">' +
+         '<h2>Welcome back, Jordan.</h2>' +
+         '<p>' +
+           'Ready to continue your Humana Tier 1 Advocate training?' +
+         '</p>' +
+         '<br>' +
+         '<strong>' +
+           mod.label +
+         '</strong>' +
+         '<br><br>' +
+         'Lesson ' +
+         (state.currentLessonIndex + 1) +
+         ': ' +
+         lesson.name +
+       '</div>' +
+     '</div>' +
+   '</div>';
+ const chips =
+   document.getElementById(
+     'chips-wrap'
+   );
+ if (!chips) return;
+ chips.innerHTML =
+   '<button class="chip chip-primary" ' +
+   'onclick="beginLearningSession()">' +
    'Begin Session' +
    '</button>';
 }
 // ── Begin Session ──
 function beginLearningSession() {
- const lesson = currentLesson();
+ const lesson =
+   currentLesson();
  const msgs =
-   document.getElementById('messages');
- msgs.innerHTML = '';
- const card =
-   document.createElement('div');
- card.className = 'message ai';
- card.innerHTML = `
-<div class="msg-avatar ai">AI</div>
-<div class="msg-content">
-<div class="msg-bubble">
-<strong>
-         Lesson ${state.currentLessonIndex + 1}
-</strong>
-<h3>${lesson.name}</h3>
-<p>
-         This lesson focuses on helping you confidently handle member calls related to ${lesson.name.toLowerCase()}.
-</p>
-</div>
-</div>
- `;
- msgs.appendChild(card);
- document.getElementById('chips-wrap').innerHTML =
-   '<button class="chip chip-primary" onclick="startLesson()">' +
+   document.getElementById(
+     'messages'
+   );
+ if (!msgs) return;
+ msgs.innerHTML =
+   '<div class="message ai">' +
+     '<div class="msg-avatar ai">AI</div>' +
+     '<div class="msg-content">' +
+       '<div class="msg-bubble">' +
+         '<strong>' +
+           'Lesson ' +
+           (state.currentLessonIndex + 1) +
+         '</strong>' +
+         '<h3>' +
+           lesson.name +
+         '</h3>' +
+         '<p>' +
+           'This lesson focuses on helping you confidently handle member calls related to ' +
+           lesson.name.toLowerCase() +
+         '.</p>' +
+       '</div>' +
+     '</div>' +
+   '</div>';
+ document.getElementById(
+   'chips-wrap'
+ ).innerHTML =
+   '<button class="chip chip-primary" ' +
+   'onclick="startLesson()">' +
    'Start Lesson' +
    '</button>';
 }
