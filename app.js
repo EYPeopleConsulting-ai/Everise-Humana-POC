@@ -208,9 +208,10 @@ async function fetchAI() {
      method: 'POST',
      headers: { 'Content-Type': 'application/json' },
      body: JSON.stringify({
-       system: systemPrompt,
-       messages: state.conversationHistory,
-       max_tokens: 1000,
+      model: 'claude-sonnet-4-20250514',
+      system: systemPrompt,
+      messages: state.conversationHistory,
+      max_tokens: 1000,
      }),
    });
    if (!res.ok) throw new Error(`Server error: ${res.status}`);
