@@ -54,6 +54,28 @@ const MODULES = {
 };
 // ── State ──
 let state = {
+ // ── Post Teaching Actions ──
+function showPostTeachActions() {
+ document.getElementById('chips-wrap').innerHTML =
+   '<button class="chip" onclick="triggerQuiz()">' +
+   'Check Understanding' +
+   '</button>' +
+   '<button class="chip chip-primary" onclick="triggerScenario()">' +
+   'Practice Scenario' +
+   '</button>';
+}
+// ── Next Lesson Button ──
+function showNextLessonButton() {
+ const mod = MODULES[state.currentModule];
+ const isLast =
+   state.currentLessonIndex >= mod.lessons.length - 1;
+ document.getElementById('chips-wrap').innerHTML =
+   '<button class="chip chip-primary" onclick="nextLesson()">' +
+   (isLast
+     ? 'Complete Module →'
+     : 'Next Lesson →') +
+   '</button>';
+}
  currentModule: 'medical-basic',
  currentLessonIndex: 0,
  lessonPhase: 'idle',
