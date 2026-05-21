@@ -1,6 +1,15 @@
-// ── Config ──
-const PROXY_URL = window.PROXY_URL || 'https://humana-proxy.onrender.com';
-// ── Module Data ──
+// ============================================
+// LEARNER ASSIST — CLEAN FINAL APP.JS
+// ============================================
+// ─────────────────────────────────────────────
+// CONFIG
+// ─────────────────────────────────────────────
+const PROXY_URL =
+ window.PROXY_URL ||
+ 'https://humana-proxy.onrender.com/api/chat';
+// ─────────────────────────────────────────────
+// MODULE DATA
+// ─────────────────────────────────────────────
 const MODULES = {
  'medical-basic': {
    label: 'Medical Basic Benefits',
@@ -14,7 +23,9 @@ const MODULES = {
      { id: 'mb7', name: 'Therapy and Rehabilitation Services' },
      { id: 'mb8', name: 'Completing a Health Risk Assessment (HRA)' },
    ],
-   systemContext: `PASTE YOUR FULL ORIGINAL MEDICAL BASIC BENEFITS CURRICULUM HERE`
+   systemContext: `
+PASTE YOUR FULL ORIGINAL MEDICAL BASIC BENEFITS CURRICULUM HERE
+`
  },
  'medical-additional': {
    label: 'Medical Additional Benefits',
@@ -28,7 +39,9 @@ const MODULES = {
      { id: 'ma7', name: 'Coordination of Benefits (COB)' },
      { id: 'ma8', name: 'Smart Summary Statements' },
    ],
-   systemContext: `PASTE YOUR FULL ORIGINAL MEDICAL ADDITIONAL BENEFITS CURRICULUM HERE`
+   systemContext: `
+PASTE YOUR FULL ORIGINAL MEDICAL ADDITIONAL BENEFITS CURRICULUM HERE
+`
  },
  'auth-appeals': {
    label: 'Authorisations & Appeals',
@@ -42,10 +55,14 @@ const MODULES = {
      { id: 'aa7', name: 'Timelines & Member Rights' },
      { id: 'aa8', name: 'Complex Call Scenarios' },
    ],
-   systemContext: `PASTE YOUR FULL ORIGINAL AUTHORISATIONS & APPEALS CURRICULUM HERE`
+   systemContext: `
+PASTE YOUR FULL ORIGINAL AUTHORISATIONS & APPEALS CURRICULUM HERE
+`
  }
 };
-// ── State ──
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
 let state = {
  currentModule: 'medical-basic',
  currentLessonIndex: 0,
@@ -59,27 +76,40 @@ let state = {
  },
  isLoading: false,
  correctAnswers: 0,
- totalAnswers: 0,
+ totalAnswers: 0
 };
-// ── Init ──
-document.addEventListener('DOMContentLoaded', () => {
- renderLessons();
- updateProgressBars();
- showWelcomeScreen();
-});
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+document.addEventListener(
+ 'DOMContentLoaded',
+ () => {
+   renderLessons();
+   updateProgressBars();
+   showWelcomeScreen();
+ }
+);
+// ─────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────
 function currentLesson() {
- return MODULES[state.currentModule]
-   .lessons[state.currentLessonIndex];
+ return MODULES[
+   state.currentModule
+ ].lessons[
+   state.currentLessonIndex
+ ];
 }
-// ── Welcome Screen ──
+// ─────────────────────────────────────────────
+// WELCOME SCREEN
+// ─────────────────────────────────────────────
 function showWelcomeScreen() {
- const lesson = currentLesson();
+ const lesson =
+   currentLesson();
  const mod =
    MODULES[state.currentModule];
- const msgs =
-   document.getElementById('messages');
- if (!msgs) return;
- msgs.innerHTML =
+ document.getElementById(
+   'messages'
+ ).innerHTML =
    '<div class="message ai">' +
      '<div class="msg-avatar ai">AI</div>' +
      '<div class="msg-content">' +
@@ -100,27 +130,22 @@ function showWelcomeScreen() {
        '</div>' +
      '</div>' +
    '</div>';
- const chips =
-   document.getElementById(
-     'chips-wrap'
-   );
- if (!chips) return;
- chips.innerHTML =
-   '<button class="chip chip-primary" ' +
-   'onclick="beginLearningSession()">' +
+ document.getElementById(
+   'chips-wrap'
+ ).innerHTML =
+   '<button class="chip chip-primary" onclick="beginLearningSession()">' +
    'Begin Session' +
    '</button>';
 }
-// ── Begin Session ──
+// ─────────────────────────────────────────────
+// BEGIN SESSION
+// ─────────────────────────────────────────────
 function beginLearningSession() {
  const lesson =
    currentLesson();
- const msgs =
-   document.getElementById(
-     'messages'
-   );
- if (!msgs) return;
- msgs.innerHTML =
+ document.getElementById(
+   'messages'
+ ).innerHTML =
    '<div class="message ai">' +
      '<div class="msg-avatar ai">AI</div>' +
      '<div class="msg-content">' +
@@ -142,24 +167,26 @@ function beginLearningSession() {
  document.getElementById(
    'chips-wrap'
  ).innerHTML =
-   '<button class="chip chip-primary" ' +
-   'onclick="startLesson()">' +
+   '<button class="chip chip-primary" onclick="startLesson()">' +
    'Start Lesson' +
    '</button>';
 }
-// ── Module Switch ──
+// ─────────────────────────────────────────────
+// MODULE SWITCH
+// ─────────────────────────────────────────────
 function switchModule(moduleId) {
  state.currentModule = moduleId;
  state.currentLessonIndex = 0;
  state.lessonPhase = 'idle';
  state.conversationHistory = [];
- document.querySelectorAll('.module-item')
-   .forEach(el => {
-     el.classList.toggle(
-       'active',
-       el.dataset.module === moduleId
-     );
-   });
+ document.querySelectorAll(
+   '.module-item'
+ ).forEach(el => {
+   el.classList.toggle(
+     'active',
+     el.dataset.module === moduleId
+   );
+ });
  document.getElementById(
    'current-module-label'
  ).textContent =
@@ -172,15 +199,19 @@ function switchModule(moduleId) {
  updateProgressBars();
  showWelcomeScreen();
 }
-// ── Start Lesson ──
+// ─────────────────────────────────────────────
+// START LESSON
+// ─────────────────────────────────────────────
 function startLesson() {
- const lesson = currentLesson();
+ const lesson =
+   currentLesson();
  const mod =
    MODULES[state.currentModule];
  state.lessonProgress[
 lesson.id
  ] = 'in-progress';
- state.lessonPhase = 'teaching';
+ state.lessonPhase =
+   'teaching';
  renderLessons();
  updateProgressBars();
  showLessonBanner(
@@ -195,51 +226,81 @@ lesson.id
    'You are teaching the lesson "' +
    lesson.name +
    '".\n\n' +
-   'Teach ONLY the first foundational concept for this lesson.\n\n' +
+   'Teach ONLY the first foundational concept.\n\n' +
    'Rules:\n' +
    '- Maximum 120 words\n' +
    '- Use short paragraphs\n' +
    '- Use conversational language\n' +
    '- Use one realistic Humana member example\n' +
-   '- Do not teach the full lesson\n' +
-   '- Do not summarise upcoming topics\n' +
+   '- Do not teach the entire lesson\n' +
    '- End naturally like a live trainer';
- state.conversationHistory = [];
- state.conversationHistory.push({
-   role: 'user',
-   content: prompt
- });
+ state.conversationHistory = [
+   {
+     role: 'user',
+     content: prompt
+   }
+ ];
  fetchAI();
 }
-// ── Lesson Banner ──
+// ─────────────────────────────────────────────
+// LESSON BANNER
+// ─────────────────────────────────────────────
 function showLessonBanner(
  lessonName,
  current,
  total
 ) {
  const msgs =
-   document.getElementById('messages');
+   document.getElementById(
+     'messages'
+   );
+ msgs.innerHTML = '';
  const banner =
-   document.createElement('div');
- banner.className = 'lesson-banner';
+   document.createElement(
+     'div'
+   );
+ banner.className =
+   'lesson-banner';
  banner.innerHTML =
    '<div class="lesson-banner-inner">' +
-   '<span class="lesson-counter">' +
-   'Lesson ' +
-   current +
-   ' of ' +
-   total +
-   '</span>' +
-   '<span class="lesson-banner-title">' +
-   lessonName +
-   '</span>' +
+     '<span class="lesson-counter">' +
+       'Lesson ' +
+       current +
+       ' of ' +
+       total +
+     '</span>' +
+     '<span class="lesson-banner-title">' +
+       lessonName +
+     '</span>' +
    '</div>';
  msgs.appendChild(banner);
 }
-// ── Quiz ──
+// ─────────────────────────────────────────────
+// MODES
+// ─────────────────────────────────────────────
+function setMode(mode) {
+ document.querySelectorAll(
+   '.mode-btn'
+ ).forEach(btn => {
+   btn.classList.toggle(
+     'active',
+btn.id === 'mode-' + mode
+   );
+ });
+ if (mode === 'quiz') {
+   triggerQuiz();
+ }
+ if (mode === 'scenario') {
+   triggerScenario();
+ }
+}
+// ─────────────────────────────────────────────
+// QUIZ
+// ─────────────────────────────────────────────
 function triggerQuiz() {
  state.lessonPhase = 'quiz';
- const lesson = currentLesson();
+ const lesson =
+   currentLesson();
  const prompt =
    'Generate ONE short knowledge check question for "' +
    lesson.name +
@@ -260,10 +321,14 @@ function triggerQuiz() {
  });
  fetchAI();
 }
-// ── Scenario ──
+// ─────────────────────────────────────────────
+// SCENARIO
+// ─────────────────────────────────────────────
 function triggerScenario() {
- state.lessonPhase = 'scenario';
- const lesson = currentLesson();
+ state.lessonPhase =
+   'scenario';
+ const lesson =
+   currentLesson();
  const prompt =
    'Create ONE realistic Humana member call scenario for "' +
    lesson.name +
@@ -276,7 +341,9 @@ function triggerScenario() {
  });
  fetchAI();
 }
-// ── Next Lesson ──
+// ─────────────────────────────────────────────
+// NEXT LESSON
+// ─────────────────────────────────────────────
 function nextLesson() {
  const mod =
    MODULES[state.currentModule];
@@ -298,7 +365,9 @@ lesson.id
    showModuleComplete();
  }
 }
-// ── Module Complete ──
+// ─────────────────────────────────────────────
+// MODULE COMPLETE
+// ─────────────────────────────────────────────
 function showModuleComplete() {
  const mod =
    MODULES[state.currentModule];
@@ -306,66 +375,25 @@ function showModuleComplete() {
    'messages'
  ).innerHTML =
    '<div class="message ai">' +
-   '<div class="msg-avatar ai">AI</div>' +
-   '<div class="msg-content">' +
-   '<div class="msg-bubble">' +
-   '<h2>Module Complete!</h2>' +
-   '<p>' +
-   'Great work, Jordan. You completed ' +
-   mod.label +
-   '.' +
-   '</p>' +
-   '</div>' +
-   '</div>' +
+     '<div class="msg-avatar ai">AI</div>' +
+     '<div class="msg-content">' +
+       '<div class="msg-bubble">' +
+         '<h2>Module Complete!</h2>' +
+         '<p>' +
+           'Great work, Jordan. You completed ' +
+           mod.label +
+           '.' +
+         '</p>' +
+       '</div>' +
+     '</div>' +
    '</div>';
  document.getElementById(
    'chips-wrap'
  ).innerHTML = '';
 }
-// ── Render Lessons ──
-function renderLessons() {
- const module =
-   MODULES[state.currentModule];
- const list =
-   document.getElementById(
-     'lessons-list'
-   );
- list.innerHTML = '';
- document.getElementById(
-   'mpd-title'
- ).textContent =
-   module.label;
- module.lessons.forEach(
-   function(lesson, idx) {
-     const status =
-       state.lessonProgress[
-lesson.id
-       ] || '';
-     const isCurrent =
-       idx ===
-       state.currentLessonIndex;
-     const row =
-       document.createElement('div');
-     row.className =
-       'lesson-row' +
-       (isCurrent
-         ? ' current'
-         : '');
-     row.innerHTML =
-       '<div class="lesson-check ' +
-       status +
-       '"></div>' +
-       '<span class="lesson-name">' +
-       lesson.name +
-       '</span>' +
-       (isCurrent
-         ? '<span class="lesson-active-dot"></span>'
-         : '');
-     list.appendChild(row);
-   }
- );
-}
-// ── Progress Bars ──
+// ─────────────────────────────────────────────
+// PROGRESS BARS
+// ─────────────────────────────────────────────
 function updateProgressBars() {
  let total = 0;
  let done = 0;
@@ -376,9 +404,7 @@ function updateProgressBars() {
      lessons.forEach(function(l) {
        total++;
        if (
-         state.lessonProgress[
-l.id
-         ] === 'complete'
+         state.lessonProgress[l.id] === 'complete'
        ) {
          done++;
        }
@@ -387,9 +413,7 @@ l.id
        (
          lessons.filter(function(l) {
            return (
-             state.lessonProgress[
-l.id
-             ] === 'complete'
+             state.lessonProgress[l.id] === 'complete'
            );
          }).length /
          lessons.length
@@ -407,9 +431,10 @@ l.id
          pct + '%';
      }
    });
- const overall = Math.round(
-   (done / total) * 100
- );
+ const overall =
+   Math.round(
+     (done / total) * 100
+   );
  document.getElementById(
    'overall-bar'
  ).style.width =
@@ -419,7 +444,54 @@ l.id
  ).textContent =
    overall + '%';
 }
-// ── Send Message ──
+// ─────────────────────────────────────────────
+// RENDER LESSONS
+// ─────────────────────────────────────────────
+function renderLessons() {
+ const module =
+   MODULES[state.currentModule];
+ const list =
+   document.getElementById(
+     'lessons-list'
+   );
+ list.innerHTML = '';
+ module.lessons.forEach(
+   function(lesson, idx) {
+     const status =
+       state.lessonProgress[
+lesson.id
+       ] || '';
+     const isCurrent =
+       idx ===
+       state.currentLessonIndex;
+     const row =
+       document.createElement(
+         'div'
+       );
+     row.className =
+       'lesson-row' +
+       (isCurrent
+         ? ' current'
+         : '');
+     row.innerHTML =
+       '<div class="lesson-check ' +
+       status +
+       '"></div>' +
+       '<span class="lesson-name">' +
+       lesson.name +
+       '</span>' +
+       (
+         isCurrent
+           ? '<span class="lesson-active-dot"></span>'
+           : ''
+       );
+     list.appendChild(row);
+   }
+ );
+}
+// ─────────────────────────────────────────────
+// SEND MESSAGE
+// ─────────────────────────────────────────────
 async function sendMessage() {
  const input =
    document.getElementById(
@@ -460,7 +532,9 @@ function autoResize(el) {
      120
    ) + 'px';
 }
-// ── AI Fetch ──
+// ─────────────────────────────────────────────
+// FETCH AI
+// ─────────────────────────────────────────────
 async function fetchAI() {
  state.isLoading = true;
  document.getElementById(
@@ -471,7 +545,7 @@ async function fetchAI() {
  ).classList.remove('hidden');
  try {
    const res = await fetch(
-     'https://humana-proxy.onrender.com/api/chat',
+     PROXY_URL,
      {
        method: 'POST',
        headers: {
@@ -479,12 +553,14 @@ async function fetchAI() {
            'application/json'
        },
        body: JSON.stringify({
-         model: 'claude-sonnet-4-5',
-         system: buildSystemPrompt(),
+         model:
+           'claude-sonnet-4-5',
+         system:
+           buildSystemPrompt(),
          messages:
            state.conversationHistory.slice(-6),
-         max_tokens: 250,
-       }),
+         max_tokens: 250
+       })
      }
    );
    if (!res.ok) {
@@ -498,11 +574,7 @@ async function fetchAI() {
    const aiText =
      data.content &&
      data.content.find(
-       function(b) {
-         return (
-           b.type === 'text'
-         );
-       }
+       x => x.type === 'text'
      );
    const text =
      aiText
@@ -555,19 +627,23 @@ async function fetchAI() {
    ).disabled = false;
  }
 }
-// ── Post Teaching Actions ──
+// ─────────────────────────────────────────────
+// POST TEACHING ACTIONS
+// ─────────────────────────────────────────────
 function showPostTeachActions() {
  document.getElementById(
    'chips-wrap'
  ).innerHTML =
    '<button class="chip" onclick="triggerQuiz()">' +
-   'Check Understanding' +
+     'Check Understanding' +
    '</button>' +
    '<button class="chip chip-primary" onclick="triggerScenario()">' +
-   'Practice Scenario' +
+     'Practice Scenario' +
    '</button>';
 }
-// ── Next Lesson Button ──
+// ─────────────────────────────────────────────
+// NEXT LESSON BUTTON
+// ─────────────────────────────────────────────
 function showNextLessonButton() {
  const mod =
    MODULES[state.currentModule];
@@ -578,14 +654,16 @@ function showNextLessonButton() {
    'chips-wrap'
  ).innerHTML =
    '<button class="chip chip-primary" onclick="nextLesson()">' +
-   (
-     isLast
-       ? 'Complete Module →'
-       : 'Next Lesson →'
-   ) +
+     (
+       isLast
+         ? 'Complete Module →'
+         : 'Next Lesson →'
+     ) +
    '</button>';
 }
-// ── Adaptive Difficulty ──
+// ─────────────────────────────────────────────
+// ADAPTIVE DIFFICULTY
+// ─────────────────────────────────────────────
 function getAdaptiveDifficulty() {
  if (
    state.totalAnswers < 2
@@ -603,7 +681,9 @@ function getAdaptiveDifficulty() {
  }
  return 'beginner';
 }
-// ── System Prompt ──
+// ─────────────────────────────────────────────
+// SYSTEM PROMPT
+// ─────────────────────────────────────────────
 function buildSystemPrompt() {
  const mod =
    MODULES[state.currentModule];
@@ -615,7 +695,7 @@ function buildSystemPrompt() {
    intermediate:
      'Use healthcare terminology with explanations.',
    advanced:
-     'Use advanced healthcare terminology and edge cases.',
+     'Use advanced healthcare terminology and edge cases.'
  };
  return (
    mod.systemContext +
@@ -625,7 +705,9 @@ function buildSystemPrompt() {
    diffGuide[level]
  );
 }
-// ── Append Message ──
+// ─────────────────────────────────────────────
+// APPEND MESSAGE
+// ─────────────────────────────────────────────
 function appendMessage(
  role,
  text
@@ -642,28 +724,30 @@ function appendMessage(
    'message ' + role;
  div.innerHTML =
    '<div class="msg-avatar ' +
-   (
-     role === 'ai'
-       ? 'ai'
-       : 'user-av'
-   ) +
-   '">' +
-   (
-     role === 'ai'
-       ? 'AI'
-       : 'JC'
-   ) +
+     (
+       role === 'ai'
+         ? 'ai'
+         : 'user-av'
+     ) +
+     '">' +
+     (
+       role === 'ai'
+         ? 'AI'
+         : 'JC'
+     ) +
    '</div>' +
    '<div class="msg-content">' +
-   '<div class="msg-bubble">' +
-   formatMessage(text) +
-   '</div>' +
+     '<div class="msg-bubble">' +
+       formatMessage(text) +
+     '</div>' +
    '</div>';
  msgs.appendChild(div);
  msgs.scrollTop =
    msgs.scrollHeight;
 }
-// ── Format Message ──
+// ─────────────────────────────────────────────
+// FORMAT MESSAGE
+// ─────────────────────────────────────────────
 function formatMessage(text) {
  return text
    .replace(/&/g, '&amp;')
@@ -696,14 +780,19 @@ function formatMessage(text) {
      ''
    );
 }
-// ── Quiz Rendering ──
+// ─────────────────────────────────────────────
+// QUIZ RENDERING
+// ─────────────────────────────────────────────
 function renderQuizFromText(text) {
  const match =
    text.match(
      /QUIZ_START([\s\S]*?)QUIZ_END/
    );
  if (!match) {
-   appendMessage('ai', text);
+   appendMessage(
+     'ai',
+     text
+   );
    return;
  }
  const lines =
@@ -717,34 +806,48 @@ function renderQuizFromText(text) {
  let correct = '';
  let explanation = '';
  lines.forEach(function(line) {
-   if (line.startsWith('Q:')) {
+   if (
+     line.startsWith('Q:')
+   ) {
      question =
        line.slice(2).trim();
    }
-   else if (line.startsWith('A:')) {
+   else if (
+     line.startsWith('A:')
+   ) {
      options.A =
        line.slice(2).trim();
    }
-   else if (line.startsWith('B:')) {
+   else if (
+     line.startsWith('B:')
+   ) {
      options.B =
        line.slice(2).trim();
    }
-   else if (line.startsWith('C:')) {
+   else if (
+     line.startsWith('C:')
+   ) {
      options.C =
        line.slice(2).trim();
    }
-   else if (line.startsWith('D:')) {
+   else if (
+     line.startsWith('D:')
+   ) {
      options.D =
        line.slice(2).trim();
    }
    else if (
-     line.startsWith('CORRECT:')
+     line.startsWith(
+       'CORRECT:'
+     )
    ) {
      correct =
        line.slice(8).trim();
    }
    else if (
-     line.startsWith('EXPLANATION:')
+     line.startsWith(
+       'EXPLANATION:'
+     )
    ) {
      explanation =
        line.slice(12).trim();
@@ -755,43 +858,47 @@ function renderQuizFromText(text) {
      'messages'
    );
  const card =
-   document.createElement('div');
+   document.createElement(
+     'div'
+   );
  card.className =
    'message ai';
  const optionsHtml =
    Object.entries(options)
      .map(([key, value]) =>
        '<button class="quiz-option" ' +
-       'onclick="handleQuizAnswer(this,\'' +
-       key +
-       '\',\'' +
-       correct +
-       '\',`' +
-       explanation.replace(/`/g, "'") +
-       '`)"' +
+         'onclick="handleQuizAnswer(this,\'' +
+         key +
+         '\',\'' +
+         correct +
+         '\',`' +
+         explanation +
+         '`)"' +
        '>' +
-       '<strong>' +
-       key +
-       '.</strong> ' +
-       value +
+         '<strong>' +
+           key +
+         '.</strong> ' +
+         value +
        '</button><br><br>'
      ).join('');
  card.innerHTML =
    '<div class="msg-avatar ai">AI</div>' +
    '<div class="msg-content">' +
-   '<div class="msg-bubble">' +
-   '<strong>Knowledge Check</strong>' +
-   '<br><br>' +
-   question +
-   '<br><br>' +
-   optionsHtml +
-   '</div>' +
+     '<div class="msg-bubble">' +
+       '<strong>Knowledge Check</strong>' +
+       '<br><br>' +
+       question +
+       '<br><br>' +
+       optionsHtml +
+     '</div>' +
    '</div>';
  msgs.appendChild(card);
  msgs.scrollTop =
    msgs.scrollHeight;
 }
-// ── Quiz Answer Handling ──
+// ─────────────────────────────────────────────
+// QUIZ ANSWER HANDLING
+// ─────────────────────────────────────────────
 function handleQuizAnswer(
  btn,
  selected,
@@ -816,26 +923,10 @@ function handleQuizAnswer(
      ? 'correct'
      : 'wrong'
  );
- if (!isCorrect) {
-   const correctBtn =
-     Array.from(
-       parent.querySelectorAll(
-         '.quiz-option'
-       )
-     ).find(
-       b =>
-         b.innerText
-           .trim()
-           .startsWith(correct)
-     );
-   if (correctBtn) {
-     correctBtn.classList.add(
-       'correct'
-     );
-   }
- }
  const feedback =
-   document.createElement('div');
+   document.createElement(
+     'div'
+   );
  feedback.className =
    'quiz-feedback';
  feedback.innerHTML =
@@ -845,7 +936,9 @@ function handleQuizAnswer(
        : '✗ Not quite. '
    ) +
    explanation;
- parent.appendChild(feedback);
+ parent.appendChild(
+   feedback
+ );
  setTimeout(() => {
    const mod =
      MODULES[state.currentModule];
@@ -856,14 +949,14 @@ function handleQuizAnswer(
      'chips-wrap'
    ).innerHTML =
      '<button class="chip" onclick="triggerScenario()">' +
-     'Practice Scenario' +
+       'Practice Scenario' +
      '</button>' +
      '<button class="chip chip-primary" onclick="nextLesson()">' +
-     (
-       isLast
-         ? 'Complete Module →'
-         : 'Next Lesson →'
-     ) +
+       (
+         isLast
+           ? 'Complete Module →'
+           : 'Next Lesson →'
+       ) +
      '</button>';
  }, 1200);
 }
