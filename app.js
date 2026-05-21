@@ -204,7 +204,7 @@ async function fetchAI() {
  document.getElementById('typing-indicator').classList.remove('hidden');
  const systemPrompt = buildSystemPrompt();
  try {
-   const res = await fetch(`${PROXY_URL}/api/chat`, {
+   const res = await fetch(`https://humana-proxy.onrender.com/api/chat`, {
      method: 'POST',
      headers: { 'Content-Type': 'application/json' },
      body: JSON.stringify({
