@@ -344,90 +344,293 @@ function autoResize(el) {
  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
 }
 // ── AI Fetch ──
+// ── AI Fetch ──
+
 async function fetchAI() {
- state.isLoading = true;
- document.getElementById('send-btn').disabled = true;
- document.getElementById('typing-indicator').classList.remove('hidden');
- try {
-   const res = await fetch('https://humana-proxy.onrender.com/api/chat', {
-     method: 'POST',
-     headers: {
-       'Content-Type': 'application/json'
-     },
-     body: JSON.stringify({
-       model: 'claude-sonnet-4-5',
-       system: buildSystemPrompt(),
-       messages: state.conversationHistory,
-       max_tokens: 300,
-     }),
-   });
-   if (!res.ok) {
-     throw new Error('Server error: ' + res.status);
-   }
-   const data = await res.json();
-   const aiText = data.content &&
-     data.content.find(function(b) {
-       return b.type === 'text';
-     });
-   const text = aiText ? aiText.text : '(no response)';
-   state.conversationHistory.push({
-     role: 'assistant',
-     content: text
-   });
-   document.getElementById('typing-indicator').classList.add('hidden');
-   appendMessage('ai', text);
-   if (state.lessonPhase === 'teaching') {
-     showPostTeachActions();
-   } else if (state.lessonPhase === 'scenario') {
-     showNextLessonButton();
-   }
- } catch (err) {
-   document.getElementById('typing-indicator').classList.add('hidden');
-   appendMessage('ai', 'Could not connect. Error: ' + err.message);
- } finally {
-   state.isLoading = false;
-   document.getElementById('send-btn').disabled = false;
- }
+
+  state.isLoading = true;
+
+  document.getElementById('send-btn').disabled = true;
+
+  document.getElementById('typing-indicator').classList.remove('hidden');
+
+  try {
+
+    const res = await fetch('https://humana-proxy.onrender.com/api/chat', {
+
+      method: 'POST',
+
+      headers: {
+
+        'Content-Type': 'application/json'
+
+      },
+
+      body: JSON.stringify({
+
+        model: 'claude-sonnet-4-5',
+
+        system: buildSystemPrompt(),
+
+        messages: state.conversationHistory,
+
+        max_tokens: 300,
+
+      }),
+
+    });
+
+    if (!res.ok) {
+
+      throw new Error('Server error: ' + res.status);
+
+    }
+
+    const data = await res.json();
+
+    const aiText = data.content &&
+
+      data.content.find(function(b) {
+
+        return b.type === 'text';
+
+      });
+
+    const text = aiText ? aiText.text : '(no response)';
+
+    state.conversationHistory.push({
+
+      role: 'assistant',
+
+      content: text
+
+    });
+
+    document.getElementById('typing-indicator').classList.add('hidden');
+
+    appendMessage('ai', text);
+
+    if (state.lessonPhase === 'teaching') {
+
+      showPostTeachActions();
+
+    }
+
+    if (state.lessonPhase === 'scenario') {
+
+      showNextLessonButton();
+
+    }
+
+  } catch (err) {
+
+    document.getElementById('typing-indicator').classList.add('hidden');
+
+    appendMessage(
+
+      'ai',
+
+      'Could not connect. Error: ' + err.message
+
+    );
+
+  } finally {
+
+    state.isLoading = false;
+
+    document.getElementById('send-btn').disabled = false;
+
+  }
+
 }
-// ── Action Chips ──
-function showPostTeachActions() {
- document.getElementById('chips-wrap').innerHTML =
-   '<button class="chip" onclick="triggerQuiz()">' +
-   'Check Understanding' +
-   '</button>' +
-   '<button class="chip chip-primary" onclick="triggerScenario()">' +
-   'Practice Scenario' +
-   '</button>';
-}
-function showNextLessonButton() {
- const mod = MODULES[state.currentModule];
- const isLast =
-   state.currentLessonIndex >= mod.lessons.length - 1;
- document.getElementById('chips-wrap').innerHTML =
-   '<button class="chip chip-primary" onclick="nextLesson()">' +
-   (isLast ? 'Complete Module →' : 'Next Lesson →') +
-   '</button>';
-}
+
 // ── Post Teaching Actions ──
+
 function showPostTeachActions() {
- document.getElementById('chips-wrap').innerHTML =
-   '<button class="chip" onclick="triggerQuiz()">' +
-   'Check Understanding' +
-   '</button>' +
-   '<button class="chip chip-primary" onclick="triggerScenario()">' +
-   'Practice Scenario' +
-   '</button>';
+
+  document.getElementById('chips-wrap').innerHTML =
+
+    '<button class="chip" onclick="triggerQuiz()">' +
+
+    'Check Understanding' +
+
+    '</button>' +
+
+    '<button class="chip chip-primary" onclick="triggerScenario()">' +
+
+    'Practice Scenario' +
+
+    '</button>';
+
 }
+
 // ── Next Lesson Button ──
+
 function showNextLessonButton() {
- const mod = MODULES[state.currentModule];
- const isLast =
-   state.currentLessonIndex >= mod.lessons.length - 1;
- document.getElementById('chips-wrap').innerHTML =
-   '<button class="chip chip-primary" onclick="nextLesson()">' +
-   (isLast ? 'Complete Module →' : 'Next Lesson →') +
-   '</button>';
+
+  const mod = MODULES[state.currentModule];
+
+  const isLast =
+
+    state.currentLessonIndex >= mod.lessons.length - 1;
+
+  document.getElementById('chips-wrap').innerHTML =
+
+    '<button class="chip chip-primary" onclick="nextLesson()">' +
+
+    (isLast
+
+      ? 'Complete Module →'
+
+      : 'Next Lesson →') +
+
+    '</button>';
+
 }
+// ── AI Fetch ──
+
+async function fetchAI() {
+
+  state.isLoading = true;
+
+  document.getElementById('send-btn').disabled = true;
+
+  document.getElementById('typing-indicator').classList.remove('hidden');
+
+  try {
+
+    const res = await fetch('https://humana-proxy.onrender.com/api/chat', {
+
+      method: 'POST',
+
+      headers: {
+
+        'Content-Type': 'application/json'
+
+      },
+
+      body: JSON.stringify({
+
+        model: 'claude-sonnet-4-5',
+
+        system: buildSystemPrompt(),
+
+        messages: state.conversationHistory,
+
+        max_tokens: 300,
+
+      }),
+
+    });
+
+    if (!res.ok) {
+
+      throw new Error('Server error: ' + res.status);
+
+    }
+
+    const data = await res.json();
+
+    const aiText = data.content &&
+
+      data.content.find(function(b) {
+
+        return b.type === 'text';
+
+      });
+
+    const text = aiText ? aiText.text : '(no response)';
+
+    state.conversationHistory.push({
+
+      role: 'assistant',
+
+      content: text
+
+    });
+
+    document.getElementById('typing-indicator').classList.add('hidden');
+
+    appendMessage('ai', text);
+
+    if (state.lessonPhase === 'teaching') {
+
+      showPostTeachActions();
+
+    }
+
+    if (state.lessonPhase === 'scenario') {
+
+      showNextLessonButton();
+
+    }
+
+  } catch (err) {
+
+    document.getElementById('typing-indicator').classList.add('hidden');
+
+    appendMessage(
+
+      'ai',
+
+      'Could not connect. Error: ' + err.message
+
+    );
+
+  } finally {
+
+    state.isLoading = false;
+
+    document.getElementById('send-btn').disabled = false;
+
+  }
+
+}
+
+// ── Post Teaching Actions ──
+
+function showPostTeachActions() {
+
+  document.getElementById('chips-wrap').innerHTML =
+
+    '<button class="chip" onclick="triggerQuiz()">' +
+
+    'Check Understanding' +
+
+    '</button>' +
+
+    '<button class="chip chip-primary" onclick="triggerScenario()">' +
+
+    'Practice Scenario' +
+
+    '</button>';
+
+}
+
+// ── Next Lesson Button ──
+
+function showNextLessonButton() {
+
+  const mod = MODULES[state.currentModule];
+
+  const isLast =
+
+    state.currentLessonIndex >= mod.lessons.length - 1;
+
+  document.getElementById('chips-wrap').innerHTML =
+
+    '<button class="chip chip-primary" onclick="nextLesson()">' +
+
+    (isLast
+
+      ? 'Complete Module →'
+
+      : 'Next Lesson →') +
+
+    '</button>';
+
+}
+  
 // ── Adaptive Difficulty ──
 function getAdaptiveDifficulty() {
  if (state.totalAnswers < 2) return 'beginner';
